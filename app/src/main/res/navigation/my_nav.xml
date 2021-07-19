@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav"
+    app:startDestination="@id/moviesHomeFragment">
+
+    <fragment
+        android:id="@+id/moviesHomeFragment"
+        android:name="gr.imdb.movies.ui.fragments.MoviesHomeFragment"
+        android:label="fragment_movies_home"
+        tools:layout="@layout/fragment_movies_home" >
+        <action
+            android:id="@+id/action_moviesHomeFragment_to_moviesDetailsFragment"
+            app:destination="@id/moviesDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/moviesDetailsFragment"
+        android:name="gr.imdb.movies.ui.fragments.MoviesDetailsFragment"
+        android:label="fragment_movies_details"
+        tools:layout="@layout/fragment_movies_details" >
+        <argument
+            android:name="movieId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_moviesDetailsFragment_self"
+            app:destination="@id/moviesDetailsFragment" />
+        <argument
+            android:name="movie"
+            app:argType="gr.imdb.movies.models.Movie" />
+    </fragment>
+</navigation>

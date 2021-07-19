@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- regular -->
+    <font
+        android:font="@font/akkuratllgrk_regular"
+        android:fontStyle="normal"
+        android:fontWeight="400"
+
+        app:font="@font/akkuratllgrk_regular"
+        app:fontStyle="normal"
+        app:fontWeight="400" />
+
+    <!-- italic -->
+    <font
+        android:font="@font/ubuntu_italic"
+        android:fontStyle="italic"
+        android:fontWeight="400"
+
+        app:font="@font/ubuntu_italic"
+        app:fontStyle="italic"
+        app:fontWeight="400" />
+
+    <!-- bold -->
+    <font
+        android:font="@font/akkuratllgrk_bold"
+        android:fontStyle="normal"
+        android:fontWeight="700"
+
+        app:font="@font/akkuratllgrk_bold"
+        app:fontStyle="normal"
+        app:fontWeight="700" />
+
+    <!-- bold_italic -->
+    <font
+        android:font="@font/akkuratllgrk_bolditalic"
+        android:fontStyle="normal"
+        android:fontWeight="700"
+
+        app:font="@font/akkuratllgrk_bolditalic"
+        app:fontStyle="normal"
+        app:fontWeight="700" />
+
+    <!-- light -->
+
+    <font
+        android:font="@font/ubuntu_light"
+        android:fontStyle="normal"
+        android:fontWeight="700"
+
+        app:font="@font/ubuntu_light"
+        app:fontStyle="normal"
+        app:fontWeight="700" />
+
+    <!-- light_italic -->
+
+    <font
+        android:font="@font/ubuntu_light_italic"
+        android:fontStyle="normal"
+        android:fontWeight="700"
+
+        app:font="@font/ubuntu_light_italic"
+        app:fontStyle="normal"
+        app:fontWeight="700" />
+
+    <!-- medium -->
+
+    <font
+        android:font="@font/ubuntu_medium"
+        android:fontStyle="normal"
+        android:fontWeight="700"
+
+        app:font="@font/ubuntu_medium"
+        app:fontStyle="normal"
+        app:fontWeight="700" />
+
+    <!-- medium_italic -->
+
+    <font
+        android:font="@font/ubuntu_medium_italic"
+        android:fontStyle="normal"
+        android:fontWeight="700"
+
+        app:font="@font/ubuntu_medium_italic"
+        app:fontStyle="normal"
+        app:fontWeight="700" />
+
+</font-family>

@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ImdbMovies</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_input_movies_search">Search MovieRama</string>
+    <string name="description">DESCRIPTION</string>
+    <string name="director">DIRECTOR</string>
+    <string name="reviews">REVIEWS</string>
+    <string name="similar_movies">SIMILAR MOVIES</string>
+    <string name="no_reviews">No reviews</string>
+    <string name="no_movies_found">No movies Found</string>
+</resources>

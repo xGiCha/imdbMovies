@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="gr.imdb.movies.models.MovieEn" />
+
+        <variable
+            name="review"
+            type="gr.imdb.movies.models.Review" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            android:paddingBottom="16dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/movieDetailsImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="fitXY"
+                    app:image="@{item.backdropPath}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/genres"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:genre="@{item.genres}"
+                    app:layout_constraintBottom_toBottomOf="@+id/movieDetailsImage"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/movieTitleTxtV"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:textColor="@color/black"
+                    android:text="@{item.title}"
+                    android:textSize="26sp"
+                    app:layout_constraintBottom_toTopOf="@+id/genres"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintWidth_default="wrap"
+                    tools:text="wonder woman" />
+
+                <TextView
+                    android:id="@+id/dateDetailsTxtV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/mediumGray"
+                    android:textSize="18sp"
+                    app:date="@{item.releaseDate}"
+                    app:layout_constraintStart_toStartOf="@id/movieTitleTxtV"
+                    app:layout_constraintTop_toBottomOf="@+id/movieDetailsImage"
+                    tools:text="4 May 2018" />
+
+                <RatingBar
+                    android:id="@+id/movieRatings"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:numStars="5"
+                    android:progressTint="@color/darkBlue"
+                    android:stepSize="1"
+                    app:layout_constraintStart_toStartOf="@id/movieTitleTxtV"
+                    app:layout_constraintTop_toBottomOf="@+id/dateDetailsTxtV"
+                    app:ratingV="@{item.voteAverage}" />
+
+                <ImageView
+                    android:id="@+id/favoriteDetailsImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    tools:src="@drawable/ic_favorite_unselect"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/movieDetailsImage" />
+
+                <include
+                    android:id="@+id/descriptionTxtV"
+                    layout="@layout/info_component"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:body="@{item.overview}"
+                    app:headTitle="@{@string/description}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="@id/movieRatings"
+                    app:layout_constraintTop_toBottomOf="@+id/movieRatings" />
+
+                <include
+                    android:id="@+id/similarMovies"
+                    layout="@layout/info_component"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:body="@{item.overview}"
+                    app:headTitle="@{@string/similar_movies}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="@id/movieRatings"
+                    app:layout_constraintTop_toBottomOf="@+id/descriptionTxtV" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/similarMoviesRV"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/similarMovies"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/similar_movie_item"
+                    tools:visibility="visible" />
+
+                <include
+                    android:id="@+id/reviewTxtV"
+                    layout="@layout/info_component"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:headTitle="@{@string/reviews}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="@id/movieRatings"
+                    app:layout_constraintTop_toBottomOf="@+id/similarMoviesRV" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/reviewMoviesRV"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/movieRatings"
+                    app:layout_constraintTop_toBottomOf="@+id/reviewTxtV"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/review_item"
+                    tools:visibility="visible" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <ImageView
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_generic_arrow_left_short_large"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
