@@ -66,9 +66,9 @@ class MoviesDetailsFragment() : Fragment() {
     }
 
     private fun setUpListeners() {
-        binding.backBtn.setOnClickListener {
+        binding.toolbar.setNavigationOnClickListener(View.OnClickListener {
             findNavController().navigateUp()
-        }
+        })
 
         binding.favoriteDetailsImg.setOnClickListener {
             myMovie?.let { movie ->
