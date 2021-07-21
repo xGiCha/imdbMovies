@@ -11,6 +11,10 @@ class Constants {
         const val DATABASE_NAME = "movies_database"
         const val MOVIES_TABLE = "movies_table"
 
+
+        //Imdb url
+        const val IMDB_URL = "https://image.tmdb.org/t/p/w500"
+
     }
 
 }

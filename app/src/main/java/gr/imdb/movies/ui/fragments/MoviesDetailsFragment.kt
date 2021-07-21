@@ -24,7 +24,9 @@ import gr.imdb.movies.database.MoviesEntity
 import gr.imdb.movies.databinding.FragmentMoviesDetailsBinding
 import gr.imdb.movies.models.EntityReview
 import gr.imdb.movies.models.Movie
+import gr.imdb.movies.util.Constants.Companion.IMDB_URL
 import gr.imdb.movies.util.isDark
+import gr.imdb.movies.util.loadImage
 import gr.imdb.movies.viewmodels.MovieViewModel
 
 
@@ -155,18 +157,9 @@ class MoviesDetailsFragment() : Fragment() {
     }
 
     fun loadImageFromUrl(image: String){
-        val displayMetrics = context?.resources?.displayMetrics
-        val height = displayMetrics?.heightPixels
-        val width = displayMetrics?.widthPixels
+        val url = IMDB_URL + image
 
-        val url = "https://image.tmdb.org/t/p/w500$image"
-
-        Picasso.with(context)
-                .load(url)
-                .placeholder(R.drawable.blank)
-                .resize(width?:0, height?.div(4)?:0)
-                .centerCrop()
-                .into(binding.movieDetailsImage);
+        loadImage(requireContext(), url, binding.movieDetailsImage)
 
         Picasso.with(context).load(url).into(object : com.squareup.picasso.Target {
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {

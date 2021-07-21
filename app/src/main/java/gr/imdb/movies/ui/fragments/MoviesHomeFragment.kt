@@ -70,6 +70,7 @@ class MoviesHomeFragment : Fragment() {
 
         homeSwipeRefreshLayout.setOnRefreshListener {
             homeSwipeRefreshLayout.isRefreshing = true
+            showShimmerEffect()
             getMovieList(1, "")
             listener?.clearEditText()
             hideKeyboard()
@@ -104,10 +105,12 @@ class MoviesHomeFragment : Fragment() {
             }
         })
         moviesRV.layoutManager = LinearLayoutManager(requireContext())
+        showShimmerEffect()
         moviesRV.adapter = adapter
 
 
         MoviesDataSource.listMoviesCallback = { moviesList ->
+            hideShimmerEffect()
             for (i in movieFavoriteList.indices) {
                 for (l in moviesList.indices) {
                     if (movieFavoriteList[i].movie.id == moviesList[l].id) {
@@ -134,6 +137,14 @@ class MoviesHomeFragment : Fragment() {
                 movieFavoriteList = it.toMutableList()
             })
         }
+    }
+
+    private fun showShimmerEffect() {
+        moviesRV.showShimmer()
+    }
+
+    private fun hideShimmerEffect() {
+        moviesRV.hideShimmer()
     }
 
     override fun onDestroy() {

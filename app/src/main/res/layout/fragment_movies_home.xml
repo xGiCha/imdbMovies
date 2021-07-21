@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.todkars.shimmer.ShimmerRecyclerView
             android:id="@+id/moviesRV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -23,16 +23,16 @@
             android:nestedScrollingEnabled="false"
             android:overScrollMode="never"
             android:visibility="visible"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/searchContainer"
-            tools:itemCount="5"
-            tools:listitem="@layout/movie_item"
+            app:shimmer_recycler_item_count="5"
+            app:shimmer_recycler_layout="@layout/placeholder_layout"
             tools:visibility="visible" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
     <TextView
         android:id="@+id/noMoviesFoundTxtV"

@@ -11,8 +11,10 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
 import gr.imdb.movies.R
 import gr.imdb.movies.models.Genre
+import gr.imdb.movies.util.Constants
 import gr.imdb.movies.util.formatDate
 import gr.imdb.movies.util.isDark
+import gr.imdb.movies.util.loadImage
 import java.util.*
 
 
@@ -40,19 +42,8 @@ object BindingAdapters {
     @BindingAdapter("image")
     @JvmStatic
     fun ImageView.image(image: String?) {
-        val displayMetrics = context.getResources().getDisplayMetrics()
-        val height = displayMetrics.heightPixels
-        val width = displayMetrics.widthPixels
-
-        val url = "https://image.tmdb.org/t/p/w500$image"
-
-        Picasso.with(context)
-                .load(url)
-                .placeholder(R.drawable.blank)
-                .resize(width, height / 4)
-                .centerCrop()
-                .into(this);
-
+        val url = Constants.IMDB_URL + image
+        loadImage(context, url, this )
     }
 
     @BindingAdapter("imageRaw")

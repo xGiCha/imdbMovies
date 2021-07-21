@@ -10,6 +10,7 @@
 
     <color name="lightGray">#F9F9F9</color>
     <color name="mediumGray">#a5a5a5</color>
+    <color name="gray">#D1D1D1</color>
     <color name="transparent">#0000</color>
     <color name="darkBlue">#021d7c</color>
 </resources>

@@ -6,7 +6,10 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import com.squareup.picasso.Picasso
+import gr.imdb.movies.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -55,4 +58,17 @@ fun isDark(bitmap: Bitmap): Boolean {
         dark = true
     }
     return dark
+}
+
+fun loadImage(context: Context, url: String, imageV: ImageView){
+    val displayMetrics = context.resources?.displayMetrics
+    val height = displayMetrics?.heightPixels
+    val width = displayMetrics?.widthPixels
+
+    Picasso.with(context)
+            .load(url)
+            .placeholder(R.drawable.blank)
+            .resize(width?:0, height?.div(4)?:0)
+            .centerCrop()
+            .into(imageV)
 }
