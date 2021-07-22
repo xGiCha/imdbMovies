@@ -15,7 +15,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -110,4 +110,8 @@ dependencies {
 
     // Image Loading library Coil
     implementation "io.coil-kt:coil:0.13.0"
+
+    implementation "androidx.multidex:multidex:2.0.1"
+    implementation 'com.github.HaarigerHarald:android-youtubeExtractor:master-SNAPSHOT'
+    implementation 'com.google.android.exoplayer:exoplayer:2.13.2'
 }
