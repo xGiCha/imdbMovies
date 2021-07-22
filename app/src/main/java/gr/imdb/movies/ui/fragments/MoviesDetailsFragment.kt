@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.youtube.player.*
 import com.squareup.picasso.Picasso
 import gr.imdb.movies.R
 import gr.imdb.movies.adapters.ReviewsAdapter
@@ -28,9 +29,10 @@ import gr.imdb.movies.util.Constants.Companion.IMDB_URL
 import gr.imdb.movies.util.isDark
 import gr.imdb.movies.util.loadImage
 import gr.imdb.movies.viewmodels.MovieViewModel
+import kotlinx.android.synthetic.main.fragment_movies_details.*
 
 
-class MoviesDetailsFragment() : Fragment() {
+class MoviesDetailsFragment() : Fragment(), YouTubePlayer.Provider {
 
     private lateinit var movieViewModel: MovieViewModel
     private lateinit var binding: FragmentMoviesDetailsBinding
@@ -40,6 +42,7 @@ class MoviesDetailsFragment() : Fragment() {
     private var myMovie: Movie? = null
     private lateinit var moviesEntity: MoviesEntity
     private var mReviewList: MutableList<EntityReview> = mutableListOf()
+    lateinit var player: YouTubePlayer.OnInitializedListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         movieViewModel = ViewModelProvider(requireActivity()).get(MovieViewModel::class.java)
@@ -60,12 +63,21 @@ class MoviesDetailsFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+
+
         setUpObservers()
         setUpListeners()
         init()
     }
 
     private fun setUpListeners() {
+        binding.descriptionTxtV.infoContainer.setOnClickListener {
+//            val intent = YouTubeStandalonePlayer.createPlaylistIntent(requireActivity(),"AIzaSyAE73ujyORNgfnFxmceDnCjXosh4BttIFw", "iLgicO4j5jA")
+//            startActivity(intent)
+            binding.youtubePlayer.initialize("AIzaSyAE73ujyORNgfnFxmceDnCjXosh4BttIFw", player)
+
+        }
+
         binding.toolbar.setNavigationOnClickListener(View.OnClickListener {
             findNavController().navigateUp()
         })
@@ -192,6 +204,27 @@ class MoviesDetailsFragment() : Fragment() {
         adapterReview = ReviewsAdapter(requireContext(), mutableListOf())
         binding.reviewMoviesRV.layoutManager = LinearLayoutManager(requireContext())
         binding.reviewMoviesRV.adapter = adapterReview
+    }
+
+    override fun initialize(p0: String?, p1: YouTubePlayer.OnInitializedListener?) {
+        player = p1!!
+
+        player = object: YouTubePlayer.OnInitializedListener{
+            override fun onInitializationSuccess(
+                p0: YouTubePlayer.Provider?,
+                p1: YouTubePlayer?,
+                p2: Boolean
+            ) {
+
+            }
+
+            override fun onInitializationFailure(
+                p0: YouTubePlayer.Provider?,
+                p1: YouTubeInitializationResult?
+            ) {
+                TODO("Not yet implemented")
+            }
+        }
     }
 
 }

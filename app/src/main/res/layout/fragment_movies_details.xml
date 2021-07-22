@@ -225,6 +225,13 @@
                     tools:listitem="@layout/review_item"
                     tools:visibility="visible" />
 
+                <com.google.android.youtube.player.YouTubePlayerView
+                    android:id="@+id/youtubePlayer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/reviewMoviesRV"
+                    />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
