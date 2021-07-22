@@ -1,6 +1,7 @@
 package gr.imdb.movies.viewmodels
 
 import android.app.Application
+import android.provider.MediaStore
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.LivePagedListBuilder
@@ -12,6 +13,7 @@ import gr.imdb.movies.models.Movie
 import gr.imdb.movies.models.EnitityMovie
 import gr.imdb.movies.models.MovieEn
 import gr.imdb.movies.models.Review
+import gr.imdb.movies.models.Video.Video
 import gr.imdb.movies.util.Constants.Companion.API_KEY
 import gr.imdb.movies.util.NetworkResult
 import gr.imdb.movies.util.SingleLiveEvent
@@ -26,6 +28,7 @@ class MovieViewModel @ViewModelInject constructor(
     /** RETROFIT */
     var movieById: MutableLiveData<NetworkResult<MovieEn>> = MutableLiveData()
     var reviewsById: SingleLiveEvent<NetworkResult<Review>> = SingleLiveEvent()
+    var videoById: SingleLiveEvent<NetworkResult<Video>> = SingleLiveEvent()
 
     private var movieList: LiveData<PagedList<Movie>>? = null
 
@@ -42,6 +45,24 @@ class MovieViewModel @ViewModelInject constructor(
                     }
                 }else{
                     reviewsById.postValue(NetworkResult.Error("something went wrong"))
+                }
+            }
+        }
+    }
+
+    fun getVideoById(movieId: Int){
+        viewModelScope.launch(Dispatchers.Default) {
+            runCatching {
+                repository.remote.getVideoById(movieId, API_KEY)
+            }.onFailure {
+                it.printStackTrace()
+            }.onSuccess {response ->
+                if(response.isSuccessful){
+                    response.body()?.let {
+                        videoById.postValue(NetworkResult.Success(it))
+                    }
+                }else{
+                    videoById.postValue(NetworkResult.Error("something went wrong"))
                 }
             }
         }

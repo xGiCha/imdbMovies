@@ -4,6 +4,7 @@ import gr.imdb.movies.models.EnitityMovie
 import gr.imdb.movies.models.Movie
 import gr.imdb.movies.models.MovieEn
 import gr.imdb.movies.models.Review
+import gr.imdb.movies.models.Video.Video
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -29,5 +30,9 @@ class RemoteDataSource @Inject constructor(
 
     suspend fun getSimilarMoviesById(movie_id: Int, api_key: String, page: Int): Response<EnitityMovie>{
         return moviesApi.getSimilarMoviesById(movie_id, api_key, page)
+    }
+
+    suspend fun getVideoById(movie_id: Int, api_key: String): Response<Video>{
+        return moviesApi.getVideoById(movie_id, api_key)
     }
 }

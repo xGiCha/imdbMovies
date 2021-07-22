@@ -131,6 +131,15 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="4 May 2018" />
 
+                <ImageView
+                    android:id="@+id/trailerImgV"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:layout_constraintStart_toEndOf="@+id/dateDetailsTxtV"
+                    app:layout_constraintTop_toTopOf="@+id/dateDetailsTxtV"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_youtube_music"/>
+
                 <RatingBar
                     android:id="@+id/movieRatings"
                     style="@style/Widget.AppCompat.RatingBar.Small"
@@ -225,12 +234,12 @@
                     tools:listitem="@layout/review_item"
                     tools:visibility="visible" />
 
-                <com.google.android.youtube.player.YouTubePlayerView
-                    android:id="@+id/youtubePlayer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/reviewMoviesRV"
-                    />
+<!--                <com.google.android.youtube.player.YouTubePlayerView-->
+<!--                    android:id="@+id/youtubePlayer"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/reviewMoviesRV"-->
+<!--                    />-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

@@ -15,6 +15,9 @@ class Constants {
         //Imdb url
         const val IMDB_URL = "https://image.tmdb.org/t/p/w500"
 
+        const val YOUTUBE_API_KEY = "AIzaSyAE73ujyORNgfnFxmceDnCjXosh4BttIFw"
+        const val VIDEO_ID = "video_id"
+
     }
 
 }

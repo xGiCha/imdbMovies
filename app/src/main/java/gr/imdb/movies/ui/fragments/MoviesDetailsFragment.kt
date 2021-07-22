@@ -1,5 +1,6 @@
 package gr.imdb.movies.ui.fragments
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
@@ -25,14 +26,18 @@ import gr.imdb.movies.database.MoviesEntity
 import gr.imdb.movies.databinding.FragmentMoviesDetailsBinding
 import gr.imdb.movies.models.EntityReview
 import gr.imdb.movies.models.Movie
+import gr.imdb.movies.models.Video.Video
+import gr.imdb.movies.models.Video.VideoEntity
+import gr.imdb.movies.ui.YoutubePlayerActivity
 import gr.imdb.movies.util.Constants.Companion.IMDB_URL
+import gr.imdb.movies.util.Constants.Companion.VIDEO_ID
 import gr.imdb.movies.util.isDark
 import gr.imdb.movies.util.loadImage
 import gr.imdb.movies.viewmodels.MovieViewModel
 import kotlinx.android.synthetic.main.fragment_movies_details.*
 
 
-class MoviesDetailsFragment() : Fragment(), YouTubePlayer.Provider {
+class MoviesDetailsFragment() : Fragment() {
 
     private lateinit var movieViewModel: MovieViewModel
     private lateinit var binding: FragmentMoviesDetailsBinding
@@ -42,17 +47,16 @@ class MoviesDetailsFragment() : Fragment(), YouTubePlayer.Provider {
     private var myMovie: Movie? = null
     private lateinit var moviesEntity: MoviesEntity
     private var mReviewList: MutableList<EntityReview> = mutableListOf()
-    lateinit var player: YouTubePlayer.OnInitializedListener
+    private var mVideo: VideoEntity?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         movieViewModel = ViewModelProvider(requireActivity()).get(MovieViewModel::class.java)
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentMoviesDetailsBinding.inflate(inflater, container, false)
@@ -62,20 +66,16 @@ class MoviesDetailsFragment() : Fragment(), YouTubePlayer.Provider {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
-
         setUpObservers()
         setUpListeners()
         init()
     }
 
     private fun setUpListeners() {
-        binding.descriptionTxtV.infoContainer.setOnClickListener {
-//            val intent = YouTubeStandalonePlayer.createPlaylistIntent(requireActivity(),"AIzaSyAE73ujyORNgfnFxmceDnCjXosh4BttIFw", "iLgicO4j5jA")
-//            startActivity(intent)
-            binding.youtubePlayer.initialize("AIzaSyAE73ujyORNgfnFxmceDnCjXosh4BttIFw", player)
-
+        binding.trailerImgV.setOnClickListener {
+            val intent = Intent(requireContext(), YoutubePlayerActivity::class.java)
+            intent.putExtra(VIDEO_ID, mVideo?.key)
+            startActivity(intent)
         }
 
         binding.toolbar.setNavigationOnClickListener(View.OnClickListener {
@@ -91,14 +91,20 @@ class MoviesDetailsFragment() : Fragment(), YouTubePlayer.Provider {
                         moviesEntity.favoriteSelected = movie.isFavorite
                         movieViewModel.deleteMovie(moviesEntity)
                         binding.favoriteDetailsImg.background =
-                                ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_unselect)
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.ic_favorite_unselect
+                            )
                     }
                     else -> {
                         movie.isFavorite = true
                         moviesEntity.favoriteSelected = movie.isFavorite
                         movieViewModel.insertMovies(moviesEntity)
                         binding.favoriteDetailsImg.background =
-                                ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_selected)
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.ic_favorite_selected
+                            )
                     }
                 }
             }
@@ -106,9 +112,18 @@ class MoviesDetailsFragment() : Fragment(), YouTubePlayer.Provider {
     }
 
     private fun setUpObservers() {
-                movieViewModel.getMovieList(3, args.movieId.toString())?.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
+        movieViewModel.videoById.observe(viewLifecycleOwner, Observer {
+            it.data?.let {
+                if(it.results.isNotEmpty()){
+                    mVideo = it.results[0]
+                }
+            }
         })
+
+        movieViewModel.getMovieList(3, args.movieId.toString())
+            ?.observe(viewLifecycleOwner, Observer {
+                adapter.submitList(it)
+            })
 
 
         movieViewModel.movieById.observe(viewLifecycleOwner, Observer {
@@ -131,7 +146,7 @@ class MoviesDetailsFragment() : Fragment(), YouTubePlayer.Provider {
             if (mReviewList.size == 0) {
                 binding.reviewTxtV.reviewNameTxtV.visibility = View.VISIBLE
                 binding.reviewTxtV.reviewNameTxtV.text = getString(R.string.no_reviews)
-            }else{
+            } else {
                 binding.reviewTxtV.reviewNameTxtV.visibility = View.GONE
             }
         })
@@ -146,11 +161,17 @@ class MoviesDetailsFragment() : Fragment(), YouTubePlayer.Provider {
                 when (myMovie?.isFavorite) {
                     true -> {
                         binding.favoriteDetailsImg.background =
-                                ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_selected)
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.ic_favorite_selected
+                            )
                     }
                     else -> {
                         binding.favoriteDetailsImg.background =
-                                ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_unselect)
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.ic_favorite_unselect
+                            )
                     }
                 }
                 it.backdropPath?.let {
@@ -168,7 +189,7 @@ class MoviesDetailsFragment() : Fragment(), YouTubePlayer.Provider {
         setUpAdapters()
     }
 
-    fun loadImageFromUrl(image: String){
+    fun loadImageFromUrl(image: String) {
         val url = IMDB_URL + image
 
         loadImage(requireContext(), url, binding.movieDetailsImage)
@@ -176,12 +197,22 @@ class MoviesDetailsFragment() : Fragment(), YouTubePlayer.Provider {
         Picasso.with(context).load(url).into(object : com.squareup.picasso.Target {
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 bitmap?.let {
-                    if(isDark(it)){
+                    if (isDark(it)) {
                         binding.movieTitleTxtV.setTextColor(Color.WHITE)
                         binding.genres.setTextColor(Color.WHITE)
-                    }else{
-                        binding.movieTitleTxtV.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-                        binding.genres.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                    } else {
+                        binding.movieTitleTxtV.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.black
+                            )
+                        )
+                        binding.genres.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.black
+                            )
+                        )
                     }
                 }
             }
@@ -195,10 +226,16 @@ class MoviesDetailsFragment() : Fragment(), YouTubePlayer.Provider {
     }
 
     fun setUpAdapters() {
-        adapter = SimilarMovieAdapter(requireContext()){movie ->
-            findNavController().navigate(MoviesDetailsFragmentDirections.actionMoviesDetailsFragmentSelf(movie.id, movie))
+        adapter = SimilarMovieAdapter(requireContext()) { movie ->
+            findNavController().navigate(
+                MoviesDetailsFragmentDirections.actionMoviesDetailsFragmentSelf(
+                    movie.id,
+                    movie
+                )
+            )
         }
-        binding.similarMoviesRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        binding.similarMoviesRV.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         binding.similarMoviesRV.adapter = adapter
 
         adapterReview = ReviewsAdapter(requireContext(), mutableListOf())
@@ -206,25 +243,8 @@ class MoviesDetailsFragment() : Fragment(), YouTubePlayer.Provider {
         binding.reviewMoviesRV.adapter = adapterReview
     }
 
-    override fun initialize(p0: String?, p1: YouTubePlayer.OnInitializedListener?) {
-        player = p1!!
-
-        player = object: YouTubePlayer.OnInitializedListener{
-            override fun onInitializationSuccess(
-                p0: YouTubePlayer.Provider?,
-                p1: YouTubePlayer?,
-                p2: Boolean
-            ) {
-
-            }
-
-            override fun onInitializationFailure(
-                p0: YouTubePlayer.Provider?,
-                p1: YouTubeInitializationResult?
-            ) {
-                TODO("Not yet implemented")
-            }
-        }
+    override fun onResume() {
+        super.onResume()
+        movieViewModel.getVideoById(args.movieId)
     }
-
 }

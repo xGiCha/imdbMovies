@@ -4,6 +4,8 @@ import gr.imdb.movies.models.EnitityMovie
 import gr.imdb.movies.models.Movie
 import gr.imdb.movies.models.MovieEn
 import gr.imdb.movies.models.Review
+import gr.imdb.movies.models.Video.Video
+import gr.imdb.movies.models.Video.VideoEntity
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -42,5 +44,11 @@ interface MoviesApi {
             @Query("api_key") api_key: String,
             @Query("page") page: Int
     ): Response<EnitityMovie>
+
+    @GET("/3/movie/{movie_id}/videos")
+    suspend fun getVideoById(
+        @Path("movie_id") movie_id: Int,
+        @Query("api_key") api_key: String
+    ): Response<Video>
 
 }
