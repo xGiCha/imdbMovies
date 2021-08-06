@@ -109,7 +109,6 @@ class MoviesHomeFragment : Fragment() {
         showShimmerEffect()
         moviesRV.adapter = adapter
 
-
         MoviesDataSource.listMoviesCallback = { moviesList ->
             hideShimmerEffect()
             for (i in movieFavoriteList.indices) {

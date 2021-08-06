@@ -16,41 +16,35 @@ interface MoviesApi {
 
     @GET("/3/movie/popular")
     suspend fun getPopularMovies(
-            @Query("page") page: Int,
-            @Query("api_key") api_key: String = API_KEY
+            @Query("page") page: Int
 
     ): Response<EnitityMovie>
 
     @GET("/3/search/movie")
     suspend fun searchMovies(
             @Query("page") page: Int,
-            @Query("query") query: String,
-            @Query("api_key") api_key: String = API_KEY
+            @Query("query") query: String
     ): Response<EnitityMovie>
 
     @GET("/3/movie/{movie_id}")
     suspend fun getMovieById(
-            @Path("movie_id") movie_id: Int,
-            @Query("api_key") api_key: String = API_KEY
+            @Path("movie_id") movie_id: Int
     ): Response<MovieEn>
 
     @GET("/3/movie/{movie_id}/reviews")
     suspend fun getReviewsById(
-            @Path("movie_id") movie_id: Int,
-            @Query("api_key") api_key: String = API_KEY
+            @Path("movie_id") movie_id: Int
     ): Response<Review>
 
     @GET("/3/movie/{movie_id}/similar")
     suspend fun getSimilarMoviesById(
             @Path("movie_id") movie_id: Int,
-            @Query("page") page: Int,
-            @Query("api_key") api_key: String = API_KEY
+            @Query("page") page: Int
     ): Response<EnitityMovie>
 
     @GET("/3/movie/{movie_id}/videos")
     suspend fun getVideoById(
-            @Path("movie_id") movie_id: Int,
-            @Query("api_key") api_key: String = API_KEY
+            @Path("movie_id") movie_id: Int
     ): Response<Video>
 
 }

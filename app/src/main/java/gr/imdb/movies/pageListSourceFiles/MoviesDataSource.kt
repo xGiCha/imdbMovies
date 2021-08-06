@@ -26,21 +26,23 @@ class MoviesDataSource @Inject constructor(
         var listMoviesCallback :((List<Movie>) -> Unit)? = null
     }
 
+    private val page = 1
+
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Movie>) {
         coroutineScope.launch {
             kotlin.runCatching {
                 when(mode){
                     POPULAR_MOVIES ->{
-                        repository.remote.getPopularMovies( 1)
+                        repository.remote.getPopularMovies( page)
                     }
                     SEARCH_MOVIES->{
-                        repository.remote.searchMovies(1, searchQuery)
+                        repository.remote.searchMovies(page, searchQuery)
                     }
                     MOVIES_BY_ID->{
-                        repository.remote.getSimilarMoviesById(searchQuery.toInt(), 1)
+                        repository.remote.getSimilarMoviesById(searchQuery.toInt(), page)
                     }
                     else -> {
-                        repository.remote.getPopularMovies( 1)
+                        repository.remote.getPopularMovies( page)
                     }
                 }
 
@@ -67,16 +69,16 @@ class MoviesDataSource @Inject constructor(
             kotlin.runCatching {
                 when(mode){
                     POPULAR_MOVIES ->{
-                        repository.remote.getPopularMovies( params.key - 1)
+                        repository.remote.getPopularMovies( params.key - page)
                     }
                     SEARCH_MOVIES->{
-                        repository.remote.searchMovies(params.key - 1, searchQuery)
+                        repository.remote.searchMovies(params.key - page, searchQuery)
                     }
                     MOVIES_BY_ID->{
-                        repository.remote.getSimilarMoviesById(searchQuery.toInt(),  params.key - 1)
+                        repository.remote.getSimilarMoviesById(searchQuery.toInt(),  params.key - page)
                     }
                     else -> {
-                        repository.remote.getPopularMovies( params.key - 1)
+                        repository.remote.getPopularMovies( params.key - page)
                     }
                 }
             }.onFailure {
@@ -95,16 +97,16 @@ class MoviesDataSource @Inject constructor(
             kotlin.runCatching {
                 when(mode){
                     POPULAR_MOVIES ->{
-                        repository.remote.getPopularMovies( params.key + 1)
+                        repository.remote.getPopularMovies( params.key + page)
                     }
                     SEARCH_MOVIES->{
-                        repository.remote.searchMovies(params.key + 1, searchQuery)
+                        repository.remote.searchMovies(params.key + page, searchQuery)
                     }
                     MOVIES_BY_ID->{
-                        repository.remote.getSimilarMoviesById(searchQuery.toInt(), params.key + 1)
+                        repository.remote.getSimilarMoviesById(searchQuery.toInt(), params.key + page)
                     }
                     else -> {
-                        repository.remote.getPopularMovies( params.key + 1)
+                        repository.remote.getPopularMovies( params.key + page)
                     }
                 }
             }.onFailure {
