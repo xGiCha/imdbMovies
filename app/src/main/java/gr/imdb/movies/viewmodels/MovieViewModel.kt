@@ -35,7 +35,7 @@ class MovieViewModel @ViewModelInject constructor(
     fun getReviewsById(movieId: Int){
         viewModelScope.launch(Dispatchers.Default) {
             runCatching {
-                repository.remote.getReviewsById(movieId, API_KEY)
+                repository.remote.getReviewsById(movieId)
             }.onFailure {
                 it.printStackTrace()
             }.onSuccess {response ->
@@ -53,7 +53,7 @@ class MovieViewModel @ViewModelInject constructor(
     fun getVideoById(movieId: Int){
         viewModelScope.launch(Dispatchers.Default) {
             runCatching {
-                repository.remote.getVideoById(movieId, API_KEY)
+                repository.remote.getVideoById(movieId)
             }.onFailure {
                 it.printStackTrace()
             }.onSuccess {response ->
@@ -71,7 +71,7 @@ class MovieViewModel @ViewModelInject constructor(
     fun getMovieById(movieId: Int){
         viewModelScope.launch(Dispatchers.Default) {
             runCatching {
-                repository.remote.getMovieById(movieId, API_KEY)
+                repository.remote.getMovieById(movieId)
             }.onFailure {
                 it.printStackTrace()
             }.onSuccess {response ->

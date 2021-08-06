@@ -13,7 +13,7 @@ class ReviewsAdapter(
         val context: Context,
         val reviews: MutableList<EntityReview>)
 
-    :  RecyclerView.Adapter< ReviewsAdapter.ViewHolder>() {
+    : RecyclerView.Adapter<ReviewsAdapter.ViewHolder>() {
 
     private lateinit var parentContext: Context
 
@@ -21,10 +21,10 @@ class ReviewsAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.review_item, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.review_item, parent, false)
     )
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(item: EntityReview, position: Int) {
 

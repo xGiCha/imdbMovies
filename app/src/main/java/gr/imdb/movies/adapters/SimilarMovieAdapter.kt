@@ -27,7 +27,6 @@ class SimilarMovieAdapter(
         getItem(position)?.let { holder.bind(it, position) }
     }
 
-
     inner class ViewHolder(val binding: SimilarMovieItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Movie, position: Int) {

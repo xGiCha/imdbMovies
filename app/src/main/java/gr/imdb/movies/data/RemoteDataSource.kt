@@ -12,27 +12,27 @@ class RemoteDataSource @Inject constructor(
     private val moviesApi: MoviesApi
 ) {
 
-    suspend fun getPopularMovies(api_key: String, page: Int): Response<EnitityMovie>{
-        return moviesApi.getPopularMovies(api_key, page)
+    suspend fun getPopularMovies(page: Int): Response<EnitityMovie>{
+        return moviesApi.getPopularMovies(page)
     }
 
-    suspend fun searchMovies(api_key: String, page: Int, query: String): Response<EnitityMovie>{
-        return moviesApi.searchMovies(api_key, page, query)
+    suspend fun searchMovies(page: Int, query: String): Response<EnitityMovie>{
+        return moviesApi.searchMovies(page, query)
     }
 
-    suspend fun getMovieById(movie_id: Int, api_key: String): Response<MovieEn>{
-        return moviesApi.getMovieById(movie_id, api_key)
+    suspend fun getMovieById(movie_id: Int): Response<MovieEn>{
+        return moviesApi.getMovieById(movie_id)
     }
 
-    suspend fun getReviewsById(movie_id: Int, api_key: String): Response<Review>{
-        return moviesApi.getReviewsById(movie_id, api_key)
+    suspend fun getReviewsById(movie_id: Int): Response<Review>{
+        return moviesApi.getReviewsById(movie_id)
     }
 
-    suspend fun getSimilarMoviesById(movie_id: Int, api_key: String, page: Int): Response<EnitityMovie>{
-        return moviesApi.getSimilarMoviesById(movie_id, api_key, page)
+    suspend fun getSimilarMoviesById(movie_id: Int, page: Int): Response<EnitityMovie>{
+        return moviesApi.getSimilarMoviesById(movie_id, page)
     }
 
-    suspend fun getVideoById(movie_id: Int, api_key: String): Response<Video>{
-        return moviesApi.getVideoById(movie_id, api_key)
+    suspend fun getVideoById(movie_id: Int): Response<Video>{
+        return moviesApi.getVideoById(movie_id)
     }
 }

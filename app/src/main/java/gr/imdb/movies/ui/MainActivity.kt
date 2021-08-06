@@ -15,6 +15,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import gr.imdb.movies.R
 import gr.imdb.movies.ui.fragments.GenericInterface
 import gr.imdb.movies.ui.fragments.MoviesHomeFragment
+import gr.imdb.movies.util.Constants.Companion.POPULAR_MOVIES
+import gr.imdb.movies.util.Constants.Companion.SEARCH_MOVIES
 import gr.imdb.movies.util.hideKeyboard
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -62,10 +64,10 @@ class MainActivity : AppCompatActivity(), GenericInterface {
                             handler.removeCallbacksAndMessages(null)
                             handler.postDelayed({
                                 if (it != "") {
-                                    currentFragment.getMovieList(2, it)
+                                    currentFragment.getMovieList(SEARCH_MOVIES, it)
 
                                 } else {
-                                    currentFragment.getMovieList(1, "")
+                                    currentFragment.getMovieList(POPULAR_MOVIES)
                                 }
                             }, 600)
                         }

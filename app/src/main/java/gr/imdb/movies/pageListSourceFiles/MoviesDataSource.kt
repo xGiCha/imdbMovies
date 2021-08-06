@@ -5,6 +5,9 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 import gr.imdb.movies.data.Repository
 import gr.imdb.movies.models.Movie
 import gr.imdb.movies.util.Constants.Companion.API_KEY
+import gr.imdb.movies.util.Constants.Companion.MOVIES_BY_ID
+import gr.imdb.movies.util.Constants.Companion.POPULAR_MOVIES
+import gr.imdb.movies.util.Constants.Companion.SEARCH_MOVIES
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,17 +30,17 @@ class MoviesDataSource @Inject constructor(
         coroutineScope.launch {
             kotlin.runCatching {
                 when(mode){
-                    1 ->{
-                        repository.remote.getPopularMovies(API_KEY, 1)
+                    POPULAR_MOVIES ->{
+                        repository.remote.getPopularMovies( 1)
                     }
-                    2->{
-                        repository.remote.searchMovies(API_KEY,1, searchQuery)
+                    SEARCH_MOVIES->{
+                        repository.remote.searchMovies(1, searchQuery)
                     }
-                    3->{
-                        repository.remote.getSimilarMoviesById(searchQuery.toInt(), API_KEY, 1)
+                    MOVIES_BY_ID->{
+                        repository.remote.getSimilarMoviesById(searchQuery.toInt(), 1)
                     }
                     else -> {
-                        repository.remote.getPopularMovies(API_KEY, 1)
+                        repository.remote.getPopularMovies( 1)
                     }
                 }
 
@@ -48,7 +51,7 @@ class MoviesDataSource @Inject constructor(
                     callback.onResult(response.body()?.results?.toMutableList() ?: listOf(), null, 1)
                     listSizeCallback?.invoke(listSize)
                     when(mode){
-                        1,2 ->{
+                        POPULAR_MOVIES, SEARCH_MOVIES ->{
                             listMoviesCallback?.invoke(response.body()?.results?.toMutableList() ?: listOf())
                         }
                     }
@@ -63,17 +66,17 @@ class MoviesDataSource @Inject constructor(
         coroutineScope.launch {
             kotlin.runCatching {
                 when(mode){
-                    1 ->{
-                        repository.remote.getPopularMovies(API_KEY, params.key)
+                    POPULAR_MOVIES ->{
+                        repository.remote.getPopularMovies( params.key - 1)
                     }
-                    2->{
-                        repository.remote.searchMovies(API_KEY,params.key, searchQuery)
+                    SEARCH_MOVIES->{
+                        repository.remote.searchMovies(params.key - 1, searchQuery)
                     }
-                    3->{
-                        repository.remote.getSimilarMoviesById(searchQuery.toInt(), API_KEY, 1)
+                    MOVIES_BY_ID->{
+                        repository.remote.getSimilarMoviesById(searchQuery.toInt(),  params.key - 1)
                     }
                     else -> {
-                        repository.remote.getPopularMovies(API_KEY, params.key)
+                        repository.remote.getPopularMovies( params.key - 1)
                     }
                 }
             }.onFailure {
@@ -91,17 +94,17 @@ class MoviesDataSource @Inject constructor(
         coroutineScope.launch {
             kotlin.runCatching {
                 when(mode){
-                    1 ->{
-                        repository.remote.getPopularMovies(API_KEY, params.key)
+                    POPULAR_MOVIES ->{
+                        repository.remote.getPopularMovies( params.key + 1)
                     }
-                    2->{
-                        repository.remote.searchMovies(API_KEY,params.key, searchQuery)
+                    SEARCH_MOVIES->{
+                        repository.remote.searchMovies(params.key + 1, searchQuery)
                     }
-                    3->{
-                        repository.remote.getSimilarMoviesById(searchQuery.toInt(), API_KEY, 1)
+                    MOVIES_BY_ID->{
+                        repository.remote.getSimilarMoviesById(searchQuery.toInt(), params.key + 1)
                     }
                     else -> {
-                        repository.remote.getPopularMovies(API_KEY, params.key)
+                        repository.remote.getPopularMovies( params.key + 1)
                     }
                 }
             }.onFailure {

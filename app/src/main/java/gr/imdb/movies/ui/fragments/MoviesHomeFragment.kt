@@ -16,6 +16,7 @@ import gr.imdb.movies.R
 import gr.imdb.movies.adapters.MovieAdapter
 import gr.imdb.movies.database.MoviesEntity
 import gr.imdb.movies.pageListSourceFiles.MoviesDataSource
+import gr.imdb.movies.util.Constants.Companion.POPULAR_MOVIES
 import gr.imdb.movies.util.hideKeyboard
 import gr.imdb.movies.viewmodels.MovieViewModel
 import kotlinx.android.synthetic.main.fragment_movies_home.*
@@ -71,13 +72,13 @@ class MoviesHomeFragment : Fragment() {
         homeSwipeRefreshLayout.setOnRefreshListener {
             homeSwipeRefreshLayout.isRefreshing = true
             showShimmerEffect()
-            getMovieList(1, "")
+            getMovieList(POPULAR_MOVIES)
             listener?.clearEditText()
             hideKeyboard()
         }
     }
 
-    fun getMovieList(mode: Int, searchQuery: String) {
+    fun getMovieList(mode: Int, searchQuery: String= "") {
         movieViewModel.getMovieList(mode, searchQuery)?.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
             stopSwipeProgress()
@@ -85,7 +86,7 @@ class MoviesHomeFragment : Fragment() {
     }
 
     private fun setUpObservers() {
-        getMovieList(1, "")
+        getMovieList(POPULAR_MOVIES)
 
         readFromDB()
     }

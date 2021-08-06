@@ -18,6 +18,10 @@ class Constants {
         const val YOUTUBE_API_KEY = "AIzaSyAE73ujyORNgfnFxmceDnCjXosh4BttIFw"
         const val VIDEO_ID = "video_id"
 
+        const val POPULAR_MOVIES = 1
+        const val SEARCH_MOVIES = 2
+        const val MOVIES_BY_ID = 3
+
     }
 
 }

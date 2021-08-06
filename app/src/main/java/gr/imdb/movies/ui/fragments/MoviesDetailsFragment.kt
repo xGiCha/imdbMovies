@@ -29,6 +29,7 @@ import gr.imdb.movies.models.Movie
 import gr.imdb.movies.models.Video.Video
 import gr.imdb.movies.models.Video.VideoEntity
 import gr.imdb.movies.ui.YoutubePlayerActivity
+import gr.imdb.movies.util.Constants
 import gr.imdb.movies.util.Constants.Companion.IMDB_URL
 import gr.imdb.movies.util.Constants.Companion.VIDEO_ID
 import gr.imdb.movies.util.isDark
@@ -120,7 +121,7 @@ class MoviesDetailsFragment() : Fragment() {
             }
         })
 
-        movieViewModel.getMovieList(3, args.movieId.toString())
+        movieViewModel.getMovieList(Constants.MOVIES_BY_ID, args.movieId.toString())
             ?.observe(viewLifecycleOwner, Observer {
                 adapter.submitList(it)
             })
