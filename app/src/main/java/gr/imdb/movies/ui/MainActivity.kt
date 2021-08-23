@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(), GenericInterface {
                                     currentFragment.getMovieList(SEARCH_MOVIES, it)
 
                                 } else {
-                                    currentFragment.getMovieList(POPULAR_MOVIES)
+                                    currentFragment.getPopularMovies()
                                 }
                             }, 600)
                         }
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity(), GenericInterface {
 
     override fun clearEditText() {
         movieEditTxt.clearFocus()
-//        movieEditTxt.setText("")
+        movieEditTxt.text?.clear()
     }
 
     override fun removeCallBacks() {

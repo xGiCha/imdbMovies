@@ -13,7 +13,7 @@ import gr.imdb.movies.models.Movie
 
 class MovieAdapter(
     val context: Context,
-    val movieId: (id: Int, title: String, movie: Movie) -> Unit,
+    val movieId: (id: Int, movie: Movie) -> Unit,
     val favorite: (movie: Movie) -> Unit)
 
     :  PagedListAdapter<Movie, MovieAdapter.ViewHolder>(DiffCallback()) {
@@ -37,20 +37,20 @@ class MovieAdapter(
             binding.item = item
 
             if(item.isFavorite){
-                binding.favorite.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_favorite_selected))
+                binding.favorite.background = ContextCompat.getDrawable(context, R.drawable.ic_favorite_selected)
             }else
-                binding.favorite.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_favorite_unselect))
+                binding.favorite.background = ContextCompat.getDrawable(context, R.drawable.ic_favorite_unselect)
 
             binding.cardContainer.setOnClickListener {
-                movieId.invoke(item.id, item.title, item)
+                movieId.invoke(position, item)
             }
             binding.favorite.setOnClickListener {
                 if(item.isFavorite){
                     item.isFavorite = false
-                    binding.favorite.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_favorite_unselect))
+                    binding.favorite.background = ContextCompat.getDrawable(context, R.drawable.ic_favorite_unselect)
                 }else{
                     item.isFavorite = true
-                    binding.favorite.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_favorite_selected))
+                    binding.favorite.background = ContextCompat.getDrawable(context, R.drawable.ic_favorite_selected)
                 }
                 favorite.invoke(item)
             }

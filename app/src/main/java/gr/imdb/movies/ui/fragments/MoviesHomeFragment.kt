@@ -15,8 +15,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import gr.imdb.movies.R
 import gr.imdb.movies.adapters.MovieAdapter
 import gr.imdb.movies.database.MoviesEntity
+import gr.imdb.movies.models.Movie
+import gr.imdb.movies.pageListSourceFiles.MovieListDataSource
 import gr.imdb.movies.pageListSourceFiles.MoviesDataSource
-import gr.imdb.movies.util.Constants.Companion.POPULAR_MOVIES
 import gr.imdb.movies.util.hideKeyboard
 import gr.imdb.movies.viewmodels.MovieViewModel
 import kotlinx.android.synthetic.main.fragment_movies_home.*
@@ -61,41 +62,12 @@ class MoviesHomeFragment : Fragment() {
         setUpListeners()
     }
 
-    private fun stopSwipeProgress() {
-        if (homeSwipeRefreshLayout.isRefreshing) {
-            homeSwipeRefreshLayout.isRefreshing = false
-        }
-    }
-
-    private fun setUpListeners() {
-
-        homeSwipeRefreshLayout.setOnRefreshListener {
-            homeSwipeRefreshLayout.isRefreshing = true
-            showShimmerEffect()
-            getMovieList(POPULAR_MOVIES)
-            listener?.clearEditText()
-            hideKeyboard()
-        }
-    }
-
-    fun getMovieList(mode: Int, searchQuery: String= "") {
-        movieViewModel.getMovieList(mode, searchQuery)?.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
-            stopSwipeProgress()
-        })
-    }
-
-    private fun setUpObservers() {
-        getMovieList(POPULAR_MOVIES)
-
-        readFromDB()
-    }
-
     private fun init() {
-        adapter = MovieAdapter(requireContext(), { id, title, movie ->
-            findNavController().navigate(MoviesHomeFragmentDirections.actionMoviesHomeFragmentToMoviesDetailsFragment(id, movie))
+        adapter = MovieAdapter(requireContext(), { position, movie ->
+            findNavController().navigate(MoviesHomeFragmentDirections.actionMoviesHomeFragmentToMoviesDetailsFragment(movie.id, movie))
             hideKeyboard()
             listener?.removeCallBacks()
+            movieViewModel.rvPosition.postValue(position)
         }, { movie ->
             moviesEntity = MoviesEntity(movie)
             if (!movie.isFavorite) {
@@ -105,29 +77,37 @@ class MoviesHomeFragment : Fragment() {
                 movieViewModel.insertMovies(moviesEntity)
             }
         })
+
         moviesRV.layoutManager = LinearLayoutManager(requireContext())
         showShimmerEffect()
         moviesRV.adapter = adapter
 
+        MovieListDataSource.listMoviesCallback = { moviesList ->
+            hideShimmerEffect()
+            selectFavoriteMovie(moviesList)
+            checkIfMovieListIsEmpty(moviesList.size)
+        }
+
         MoviesDataSource.listMoviesCallback = { moviesList ->
             hideShimmerEffect()
-            for (i in movieFavoriteList.indices) {
-                for (l in moviesList.indices) {
-                    if (movieFavoriteList[i].movie.id == moviesList[l].id) {
-                        moviesList[l].isFavorite = movieFavoriteList[i].favoriteSelected
-                        break
-                    }
-                }
-            }
+            selectFavoriteMovie(moviesList)
+            checkIfMovieListIsEmpty(moviesList.size)
+        }
+    }
 
-            when (moviesList.size) {
-                0 -> {
-                    noMoviesFoundTxtV.visibility = View.VISIBLE
-                }
-                else -> {
-                    noMoviesFoundTxtV.visibility = View.GONE
-                }
-            }
+    private fun setUpObservers() {
+        readFromDB()
+    }
+
+    private fun setUpListeners() {
+        // Refresh list
+        homeSwipeRefreshLayout.setOnRefreshListener {
+            homeSwipeRefreshLayout.isRefreshing = true
+            showShimmerEffect()
+            movieViewModel.rvPosition.value = 0 // reset position
+            listener?.clearEditText()
+            hideKeyboard()
+            getPopularMovies()
         }
     }
 
@@ -136,6 +116,51 @@ class MoviesHomeFragment : Fragment() {
             movieViewModel.readMovies.observe(viewLifecycleOwner, Observer {
                 movieFavoriteList = it.toMutableList()
             })
+        }
+    }
+
+    private fun stopSwipeProgress() {
+        if (homeSwipeRefreshLayout.isRefreshing) {
+            homeSwipeRefreshLayout.isRefreshing = false
+        }
+    }
+
+    fun getMovieList(mode: Int, searchQuery: String= "") {
+        movieViewModel.getMovieList(mode, searchQuery)?.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
+            stopSwipeProgress()
+            hideShimmerEffect()
+        })
+    }
+
+    fun getPopularMovies(){
+        movieViewModel.popularMovies()?.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
+            hideShimmerEffect()
+            stopSwipeProgress()
+            moviesRV.scrollToPosition(movieViewModel.rvPosition.value?:0)
+        })
+    }
+
+    private fun selectFavoriteMovie(moviesList: List<Movie>){
+        for (i in movieFavoriteList.indices) {
+            for (l in moviesList.indices) {
+                if (movieFavoriteList[i].movie.id == moviesList[l].id) {
+                    moviesList[l].isFavorite = movieFavoriteList[i].favoriteSelected
+                    break
+                }
+            }
+        }
+    }
+
+    private fun checkIfMovieListIsEmpty(size: Int){
+        when (size) {
+            0 -> {
+                noMoviesFoundTxtV.visibility = View.VISIBLE
+            }
+            else -> {
+                noMoviesFoundTxtV.visibility = View.GONE
+            }
         }
     }
 
@@ -154,6 +179,7 @@ class MoviesHomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        getPopularMovies()
         listener?.clearEditText()
     }
 }

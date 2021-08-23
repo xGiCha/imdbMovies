@@ -15,16 +15,13 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
-class MoviesDataSource @Inject constructor(
+class MovieListDataSource @Inject constructor(
     private val coroutineScope: CoroutineScope,
-    private val repository: Repository,
-    private val mode: Int,
-    private val searchQuery: String
+    private val repository: Repository
 
 ) : PageKeyedDataSource<Int, Movie>() {
 
     companion object {
-        var listSize :Int = 0
         var listMoviesCallback :((List<Movie>) -> Unit)? = null
     }
 
@@ -39,12 +36,7 @@ class MoviesDataSource @Inject constructor(
             }.onSuccess { response ->
                 if (response.isSuccessful) {
                     callback.onResult(response.body()?.results?.toMutableList() ?: listOf(), null, 1)
-                    when(mode){
-                        POPULAR_MOVIES, SEARCH_MOVIES ->{
-                            listSize = response.body()?.results?.size ?: 0
-                            listMoviesCallback?.invoke(response.body()?.results?.toMutableList() ?: listOf())
-                        }
-                    }
+                    listMoviesCallback?.invoke(response.body()?.results?.toMutableList() ?: listOf())
                 }
             }
         }
@@ -79,16 +71,6 @@ class MoviesDataSource @Inject constructor(
     }
 
     private suspend fun selectApi(page: Int): Response<EnitityMovie>{
-        return when(mode){
-            SEARCH_MOVIES->{
-                repository.remote.searchMovies(page, searchQuery)
-            }
-            MOVIES_BY_ID->{
-                repository.remote.getSimilarMoviesById(searchQuery.toInt(),  page)
-            }
-            else -> {
-                repository.remote.searchMovies(page, searchQuery)
-            }
-        }
+        return repository.remote.getPopularMovies(page)
     }
 }

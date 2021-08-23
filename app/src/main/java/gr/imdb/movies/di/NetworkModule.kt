@@ -21,7 +21,7 @@ object NetworkModule {
     @Provides
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor()
 
-    //satisfies provideRetrofit
+    //satisfies provideRetrofitInstance
     @Singleton
     @Provides
     fun provideHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor) : OkHttpClient {
